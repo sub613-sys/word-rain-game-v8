@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Student</title>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body style="font-family:sans-serif;text-align:center">
+
+<h2>닉네임</h2>
+<input id="name">
+<button onclick="join()">입장</button>
+
+<div id="play" style="display:none">
+
+<h3>정답 입력</h3>
+<input id="ans">
+<button onclick="send()">Enter</button>
+
+</div>
+
+<script>
+
+const socket=io();
+
+function join(){
+ const n=document.getElementById("name").value;
+ socket.emit("join",n);
+ document.getElementById("play").style.display="block";
+}
+
+function send(){
+ const v=document.getElementById("ans").value;
+ socket.emit("answer",v);
+ document.getElementById("ans").value="";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Teacher Control</title>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body style="font-family:sans-serif">
+
+<h2>교사 컨트롤</h2>
+
+<textarea id="words" rows="10" cols="40">
+apple=사과
+river=강
+mountain=산
+music=음악
+flower=꽃
+</textarea>
+
+<br><br>
+
+<button onclick="setWords()">단어 설정</button>
+<button onclick="start()">게임 시작</button>
+
+<script>
+
+const socket=io();
+
+function parseWords(){
+ const lines=document.getElementById("words").value.split("\n");
+ return lines.map(l=>{
+  const p=l.split("=");
+  return {word:p[0],meaning:p[1]};
+ });
+}
+
+function setWords(){
+ socket.emit("setWords",parseWords());
+ alert("단어 설정 완료");
+}
+
+function start(){
+ socket.emit("startGame");
+ window.location.href="/teacher-game.html";
+}
+
+</script>
+
+</body>
+</html>

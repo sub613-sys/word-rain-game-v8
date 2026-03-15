@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Word Rain Game</title>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+body{background:#ffeef6;font-family:sans-serif;text-align:center}
+#game{position:relative;height:500px;border:2px solid pink;margin:20px}
+.word{position:absolute;background:white;padding:6px 12px;border-radius:20px}
+</style>
+</head>
+
+<body>
+
+<h1>💖 Word Rain</h1>
+
+<div id="game"></div>
+
+<h3>🏆 랭킹</h3>
+<div id="rank"></div>
+
+<audio autoplay loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_8f6c7f8b6b.mp3">
+</audio>
+
+<script>
+
+const socket=io();
+const game=document.getElementById("game");
+
+socket.on("spawnWord",(w)=>{
+
+ const el=document.createElement("div");
+ el.className="word";
+ el.innerText=w.word;
+ el.style.left=w.x+"%";
+ game.appendChild(el);
+
+ let y=0;
+
+ function fall(){
+  y+=w.speed*6;
+  el.style.top=y+"px";
+  if(y<450) requestAnimationFrame(fall);
+ }
+
+ fall();
+});
+
+socket.on("players",(p)=>{
+ document.getElementById("rank").innerHTML=
+ p.map((x,i)=>`${i+1}. ${x.name} ${x.score}`).join("<br>");
+});
+
+</script>
+
+</body>
+</html>
